@@ -9,7 +9,6 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbConvertedBy;
 
-
 import com.biblioteca.bookTrack.utils.ConversorTipoUsuario;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
 
@@ -21,7 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class Usuario {
-    private String id;
+    private int id;
 
     private String nome;
 
@@ -29,18 +28,20 @@ public class Usuario {
 
     private String senha;
 
+    private LocalDate dataNascimento;
+
     private String matricula;
 
     private boolean ativo;
 
-    private LocalDate dataNascimento;
-
     private TipoUsuario tipoUsuario;
 
-   private Penalidade penalidade;
+   private boolean penalidade;
+
+   private LocalDate dataCadastro;
 
     @DynamoDbPartitionKey
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
