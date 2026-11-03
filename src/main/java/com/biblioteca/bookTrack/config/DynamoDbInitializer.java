@@ -2,6 +2,9 @@
 package com.biblioteca.bookTrack.config;
 
 import com.biblioteca.bookTrack.model.Usuario;
+import com.biblioteca.bookTrack.model.Livro;
+import com.biblioteca.bookTrack.model.Emprestimo;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +32,8 @@ public class DynamoDbInitializer {
     @PostConstruct
     public void inicializar() {
         criarTabelaUsuario();
+        criarTabelaLivro();
+        criarTabelaEmprestimo();
         criarTabelaContadores();
     }
 
@@ -85,6 +90,58 @@ public class DynamoDbInitializer {
         }
 
         aguardarTabela("Usuario");
+    }
+
+    private void criarTabelaLivro() {
+
+        DynamoDbTable<Livro> tabela = enhancedClient.table(
+                "Livro",
+                TableSchema.fromBean(Livro.class)
+        );
+
+        try {
+            tabela.createTable(builder -> builder
+                    .provisionedThroughput(
+                            ProvisionedThroughput.builder()
+                                    .readCapacityUnits(5L)
+                                    .writeCapacityUnits(5L)
+                                    .build()
+                    )
+            );
+
+            System.out.println("Tabela Livro criada!");
+
+        } catch (ResourceInUseException e) {
+            System.out.println("Tabela Livro já existe!");
+        }
+
+        aguardarTabela("Livro");
+    }
+
+    private void criarTabelaEmprestimo() {
+
+        DynamoDbTable<Emprestimo> tabela = enhancedClient.table(
+                "Emprestimo",
+                TableSchema.fromBean(Emprestimo.class)
+        );
+
+        try {
+            tabela.createTable(builder -> builder
+                    .provisionedThroughput(
+                            ProvisionedThroughput.builder()
+                                    .readCapacityUnits(5L)
+                                    .writeCapacityUnits(5L)
+                                    .build()
+                    )
+            );
+
+            System.out.println("Tabela Emprestimo criada!");
+
+        } catch (ResourceInUseException e) {
+            System.out.println("Tabela Emprestimo já existe!");
+        }
+
+        aguardarTabela("Emprestimo");
     }
 
     private void criarTabelaContadores() {

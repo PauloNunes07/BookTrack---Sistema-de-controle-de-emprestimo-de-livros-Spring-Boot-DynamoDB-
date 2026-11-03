@@ -1,4 +1,4 @@
-package com.biblioteca.bookTrack.usuariosException;
+package com.biblioteca.bookTrack.exception.usuariosException;
 
 public class RecursoJaCadastradoException extends RuntimeException {
     public RecursoJaCadastradoException(String message) {

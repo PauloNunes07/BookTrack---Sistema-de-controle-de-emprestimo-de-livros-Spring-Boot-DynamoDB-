@@ -10,10 +10,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class LivroDTO {
 
-    @NotNull(message = "ID obrigatório.")
-    @Positive(message = "O ID deve ser maior que zero.")
-    private Integer id;
-
     @NotBlank(message = "Nome do livro obrigatório.")
     @Size(min = 2, max = 150, message = "O nome deve ter entre 2 e 150 caracteres.")
     private String nome;
