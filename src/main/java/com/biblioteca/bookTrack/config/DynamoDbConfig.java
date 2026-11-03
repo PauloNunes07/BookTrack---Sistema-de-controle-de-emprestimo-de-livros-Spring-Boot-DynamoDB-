@@ -35,21 +35,13 @@ public class DynamoDbConfig {
                 .region(Region.of(region))
                 .credentialsProvider(
                         StaticCredentialsProvider.create(
-                                AwsBasicCredentials.create(
-                                        accessKey,
-                                        secretKey
-                                )
-                        )
-                )
-                .build();
+                                AwsBasicCredentials.create(accessKey, secretKey))).build();
     }
 
     @Bean
     public DynamoDbEnhancedClient dynamoDbEnhancedClient(
             DynamoDbClient dynamoDbClient) {
 
-        return DynamoDbEnhancedClient.builder()
-                .dynamoDbClient(dynamoDbClient)
-                .build();
+        return DynamoDbEnhancedClient.builder().dynamoDbClient(dynamoDbClient).build();
     }
 }

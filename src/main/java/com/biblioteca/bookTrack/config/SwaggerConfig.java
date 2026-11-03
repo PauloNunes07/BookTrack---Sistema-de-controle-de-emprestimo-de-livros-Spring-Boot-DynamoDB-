@@ -13,9 +13,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
 
         return new OpenAPI()
-                .info(new Info()
-                        .title("BookTrack API")
-                        .version("1.0.0")
+                .info(new Info().title("BookTrack API").version("1.0.0")
                         .description("API para gerenciamento de uma biblioteca, " + "incluindo usuários, livros e empréstimos."));
     }
 }

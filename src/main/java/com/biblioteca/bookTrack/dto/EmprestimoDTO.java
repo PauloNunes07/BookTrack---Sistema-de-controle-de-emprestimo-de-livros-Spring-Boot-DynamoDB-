@@ -12,10 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class EmprestimoDTO {
 
-    @NotNull(message = "ID do empréstimo obrigatório.")
-    @Positive(message = "O ID deve ser maior que zero.")
-    private Integer id;
-
     @NotNull(message = "ID do livro obrigatório.")
     @Positive(message = "O ID do livro deve ser maior que zero.")
     private Integer livroID;

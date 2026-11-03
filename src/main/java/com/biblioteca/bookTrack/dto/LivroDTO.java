@@ -32,9 +32,6 @@ public class LivroDTO {
     @Max(value = 2026, message = "Ano de publicação não pode ser futuro.")
     private Integer anoPublicacao;
 
-    @NotNull(message = "Status do livro obrigatório.")
-    private TipoStatus status;
-
     @NotBlank(message = "Idioma obrigatório.")
     @Size(max = 50, message = "O idioma deve ter no máximo 50 caracteres.")
     private String idioma;

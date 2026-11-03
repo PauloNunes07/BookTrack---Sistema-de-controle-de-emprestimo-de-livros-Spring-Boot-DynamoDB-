@@ -49,21 +49,17 @@ public class DynamoDbInitializer {
                     .provisionedThroughput(
                             ProvisionedThroughput.builder()
                                     .readCapacityUnits(5L)
-                                    .writeCapacityUnits(5L)
-                                    .build()
+                                    .writeCapacityUnits(5L).build()
                     )
                     .globalSecondaryIndices(
                             indice -> indice
                                     .indexName("email-index")
                                     .projection(
                                             Projection.builder()
-                                                    .projectionType(ProjectionType.ALL)
-                                                    .build()
-                                    )
+                                                    .projectionType(ProjectionType.ALL).build())
                                     .provisionedThroughput(
                                             ProvisionedThroughput.builder()
-                                                    .readCapacityUnits(5L)
-                                                    .writeCapacityUnits(5L)
+                                                    .readCapacityUnits(5L).writeCapacityUnits(5L)
                                                     .build()
                                     ),
 

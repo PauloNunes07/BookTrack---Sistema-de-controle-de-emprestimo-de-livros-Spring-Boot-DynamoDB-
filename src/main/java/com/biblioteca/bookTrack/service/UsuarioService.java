@@ -215,7 +215,7 @@ public class UsuarioService {
         return usuario;
     }
 
-    public Usuario criarUsuario(UsuarioDTO usuarioDTO) {
+    private Usuario criarUsuario(UsuarioDTO usuarioDTO) {
         Validator.validarObjeto(usuarioDTO, "Usuário");
         Validator.validarString(usuarioDTO.getNome(), "Nome");
         Validator.validarString(usuarioDTO.getEmail(), "Email");

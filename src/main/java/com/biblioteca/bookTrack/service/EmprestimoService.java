@@ -4,6 +4,7 @@ package com.biblioteca.bookTrack.service;
 import com.biblioteca.bookTrack.model.Emprestimo;
 import com.biblioteca.bookTrack.model.Livro;
 
+import com.biblioteca.bookTrack.model.Usuario;
 import com.biblioteca.bookTrack.repository.EmprestimoRepository;
 import com.biblioteca.bookTrack.repository.LivroRepository;
 
@@ -13,9 +14,11 @@ import com.biblioteca.bookTrack.exception.emprestimoExceptions.EmprestimoInvalid
 import com.biblioteca.bookTrack.exception.livroExceptions.LivroNaoEncontradoException;
 import com.biblioteca.bookTrack.exception.livroExceptions.LivroIndisponivelException;
 
+import com.biblioteca.bookTrack.repository.UsuarioRepository;
 import com.biblioteca.bookTrack.utils.StatusEmprestimo;
 import com.biblioteca.bookTrack.utils.TipoStatus;
 
+import com.biblioteca.bookTrack.utils.Validator;
 import org.springframework.stereotype.Service;
 import com.biblioteca.bookTrack.utils.IdGenerator;
 
@@ -27,24 +30,31 @@ public class EmprestimoService {
 
     private final EmprestimoRepository emprestimoRepository;
     private final LivroRepository livroRepository;
+    private final UsuarioService usuarioService;
     private final IdGenerator idGenerator;
+
 
     private static final int PRAZO_DIAS = 7;
 
-    public EmprestimoService(EmprestimoRepository emprestimoRepository, LivroRepository livroRepository, IdGenerator idGenerator) {
+    public EmprestimoService(EmprestimoRepository emprestimoRepository, LivroRepository livroService,
+                             UsuarioService usuarioService, IdGenerator idGenerator) {
 
         this.emprestimoRepository = emprestimoRepository;
-        this.livroRepository = livroRepository;
+        this.livroRepository = livroService;
+        this.usuarioService = usuarioService;
         this.idGenerator = idGenerator;
     }
 
     public void registrarEmprestimo(Emprestimo emprestimo) {
 
         validarEmprestimo(emprestimo);
-        Livro livro = buscarLivro(emprestimo.getLivroID());
-        validarDisponibilidade(livro);
-        emprestimo.setId(idGenerator.gerarId("Emprestimo"));
 
+        validarUsuarioParaEmprestimo(emprestimo.getUsuarioID());
+        Livro livro = buscarLivro(emprestimo.getLivroID());
+
+        validarDisponibilidade(livro);
+
+        emprestimo.setId(idGenerator.gerarId("Emprestimo"));
         emprestimo.setDataInicial(LocalDate.now());
         emprestimo.setDataDevolucao(null);
         emprestimo.setStatusEmprestimo(StatusEmprestimo.ATIVO);
@@ -205,6 +215,20 @@ public class EmprestimoService {
 
         if (livro.getQuantidadeDisponivel() == null || livro.getQuantidadeDisponivel() < 0) {
             throw new EmprestimoInvalidoException("Quantidade disponível do livro inválida.");
+        }
+    }
+
+
+    private void validarUsuarioParaEmprestimo(Integer usuarioID) {
+
+        Usuario usuario = usuarioService.buscarPorID(usuarioID);
+
+        if (!usuario.isAtivo()) {
+            throw new EmprestimoInvalidoException("Usuário desativado não pode realizar empréstimos.");
+        }
+
+        if (usuario.isPenalidade()) {
+            throw new EmprestimoInvalidoException("Usuário penalizado. Não pode realizar empréstimos.");
         }
     }
 }

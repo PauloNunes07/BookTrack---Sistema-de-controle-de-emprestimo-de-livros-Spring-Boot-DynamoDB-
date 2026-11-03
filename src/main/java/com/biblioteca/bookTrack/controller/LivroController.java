@@ -5,6 +5,7 @@ import com.biblioteca.bookTrack.dto.LivroDTO;
 import com.biblioteca.bookTrack.model.Livro;
 import com.biblioteca.bookTrack.service.LivroService;
 
+import com.biblioteca.bookTrack.utils.TipoStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -123,7 +124,7 @@ public class LivroController {
         livro.setCategoria(livroDTO.getCategoria());
         livro.setFaixaEtaria(livroDTO.getFaixaEtaria());
         livro.setAnoPublicacao(livroDTO.getAnoPublicacao());
-        livro.setStatus(livroDTO.getStatus());
+        livro.setStatus(TipoStatus.DISPONIVEL);
         livro.setIdioma(livroDTO.getIdioma());
         livro.setSinopse(livroDTO.getSinopse());
         livro.setQuantidadeDisponivel(livroDTO.getQuantidadeDisponivel());
