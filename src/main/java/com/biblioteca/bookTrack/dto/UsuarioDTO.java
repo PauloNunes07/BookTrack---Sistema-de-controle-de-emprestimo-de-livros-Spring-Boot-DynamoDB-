@@ -44,6 +44,10 @@ public class UsuarioDTO {
     private String matricula;
 
     @NotNull(message = "O tipo de usuário é obrigatório.")
-    private TipoUsuario tipoUsuario;
+    @Pattern(
+            regexp = "(?i)BIBLIOTECARIO|ESTUDANTE|ADMINISTRADOR|PROFESSOR",
+            message = "Tipo de usuário inválido. Valores permitidos: BIBLIOTECARIO, ESTUDANTE, ADMINISTRADOR, PROFESSOR."
+    )
+    private String tipoUsuario;
 
 }

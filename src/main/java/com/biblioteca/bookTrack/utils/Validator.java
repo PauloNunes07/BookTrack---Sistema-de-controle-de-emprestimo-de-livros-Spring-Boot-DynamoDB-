@@ -1,6 +1,9 @@
 package com.biblioteca.bookTrack.utils;
 
+import tools.jackson.databind.exc.InvalidFormatException;
+
 import java.time.LocalDate;
+import java.util.EnumSet;
 
 public class Validator {
 
@@ -26,6 +29,11 @@ public class Validator {
                     "A idade deve ser maior que zero."
             );
         }
+    }
+
+    public static void validarTipoUsuario(String tipoUsuario) {
+
+        validarObjeto(tipoUsuario, "Tipo Usuario");
     }
 
     public static TipoUsuario converterTipoUsuario(String tipoUsuario) {

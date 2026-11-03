@@ -43,8 +43,22 @@ public class UsuarioRepository extends BaseRepository <Usuario> {
     }
 
     public List<Usuario> filtrarPorTipoUsuario(TipoUsuario tipoUsuario) {
-        return tabela.scan().items().stream()
-                .filter(usuario -> usuario.getTipoUsuario() == tipoUsuario).toList();
+
+        System.out.println("Pesquisando por: " + tipoUsuario);
+
+        List<Usuario> usuarios = tabela.scan().items().stream().toList();
+
+        for (Usuario usuario : usuarios) {
+            System.out.println(
+                    "ID: " + usuario.getId()
+                            + " | Nome: " + usuario.getNome()
+                            + " | Tipo: " + usuario.getTipoUsuario()
+            );
+        }
+
+        return usuarios.stream()
+                .filter(usuario -> usuario.getTipoUsuario() == tipoUsuario)
+                .toList();
     }
 
     public List<Usuario> buscarAtivos() {
@@ -59,7 +73,7 @@ public class UsuarioRepository extends BaseRepository <Usuario> {
 
     public List<Usuario> filtrarPorNome(String nome) {
         return tabela.scan().items().stream()
-                .filter(usuario -> usuario.getNome().contains(nome.toLowerCase())).toList();
+                .filter(usuario -> usuario.getNome().toLowerCase().contains(nome.toLowerCase())).toList();
     }
 
     public List<Usuario> filtrarPorPeriodo(LocalDate inicio, LocalDate fim) {

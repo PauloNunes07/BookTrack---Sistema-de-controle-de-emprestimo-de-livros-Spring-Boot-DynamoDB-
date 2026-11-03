@@ -11,6 +11,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,8 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> argumentoIlegal(
-            IllegalArgumentException erro) {
+    public ResponseEntity<String> argumentoIlegal(IllegalArgumentException erro) {
 
         return ResponseEntity.badRequest().body(erro.getMessage());
     }
@@ -52,8 +53,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> erroLeituraJson(HttpMessageNotReadableException erro) {
+    public ResponseEntity<String> erroLeituraJson(
+            HttpMessageNotReadableException erro) {
 
-        return ResponseEntity.badRequest().body("Erro ao interpretar o JSON: " + erro.getMostSpecificCause().getMessage());
+        String mensagem = "Erro ao interpretar o JSON. Verifique os valores enviados.";
+
+        return ResponseEntity.badRequest().body(mensagem);}
     }
-}

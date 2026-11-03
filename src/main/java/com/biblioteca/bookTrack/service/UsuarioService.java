@@ -155,7 +155,7 @@ public class UsuarioService {
     public List<Usuario> filtrarPorNome(String nome) {
         Validator.validarString(nome, "nome");
 
-        return usuarioRepository.filtrarPorNome(nome.trim());
+        return usuarioRepository.filtrarPorNome(nome.trim().toLowerCase());
 
     }
 
@@ -221,11 +221,12 @@ public class UsuarioService {
         Validator.validarString(usuarioDTO.getEmail(), "Email");
         Validator.validarString(usuarioDTO.getSenha(), "Senha");
         Validator.validarString(usuarioDTO.getMatricula(), "Matrícula");
-        Validator.validarObjeto(usuarioDTO.getTipoUsuario(), "Tipo de usuário");
         Validator.validarDataNascimento(usuarioDTO.getDataNascimento());
 
         String email = usuarioDTO.getEmail().trim().toLowerCase();
         String matricula = usuarioDTO.getMatricula().trim();
+
+        TipoUsuario tipoUsuario = Validator.converterTipoUsuario(usuarioDTO.getTipoUsuario());
 
         Usuario emailEncontrado = usuarioRepository.buscarPorEmail(email);
 
@@ -247,11 +248,10 @@ public class UsuarioService {
         usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
         usuario.setDataNascimento(usuarioDTO.getDataNascimento());
         usuario.setMatricula(matricula);
-        usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
+        usuario.setTipoUsuario(tipoUsuario);
         usuario.setAtivo(true);
         usuario.setDataCadastro(LocalDate.now());
 
         return usuario;
     }
-
 }
