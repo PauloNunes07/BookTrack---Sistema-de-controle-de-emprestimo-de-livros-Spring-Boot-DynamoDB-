@@ -3,6 +3,7 @@ package com.biblioteca.bookTrack.service;
 import com.biblioteca.bookTrack.dto.UsuarioDTO;
 import com.biblioteca.bookTrack.model.Usuario;
 import com.biblioteca.bookTrack.repository.UsuarioRepository;
+import com.biblioteca.bookTrack.usuariosException.RecursoJaCadastradoException;
 import com.biblioteca.bookTrack.usuariosException.UsuarioNaoEncontradoException;
 import com.biblioteca.bookTrack.utils.IdGenerator;
 import com.biblioteca.bookTrack.utils.IdOperator;
@@ -96,6 +97,26 @@ public class UsuarioService {
 
 
     }
+
+    public void adicionarPenalidade(int id) {
+        Usuario usuarioPenalizar = buscarPorID(id);
+        if(usuarioPenalizar.isPenalidade()) {
+            throw new IllegalStateException("O usuário já está penalizado.");
+
+        }
+        usuarioPenalizar.setPenalidade(true);
+        usuarioRepository.atualizar(usuarioPenalizar);
+    }
+
+    public void removerPenalidade(int id) {
+        Usuario usuarioPenalizado = buscarPorID(id);
+        if(!usuarioPenalizado.isPenalidade()) {
+            throw new IllegalStateException("O usuário não penalizado.");
+
+        }
+        usuarioPenalizado.setPenalidade(false);
+        usuarioRepository.atualizar(usuarioPenalizado);
+    }
     public Usuario buscarPorID(int id) {
         IdOperator.validarId(id);
         Usuario usuarioEncontrado = usuarioRepository.buscarPorId(id);
@@ -185,7 +206,7 @@ public class UsuarioService {
         Usuario encontrado = usuarioRepository.buscarPorEmail(email.trim());
 
         if (encontrado != null && encontrado.getId() != usuario.getId()) {
-            throw new IllegalArgumentException("Este email já está cadastrado por outro usuário.");
+            throw new RecursoJaCadastradoException("Este email já está cadastrado por outro usuário.");
         }
 
         usuario.setEmail(email.trim());
@@ -209,13 +230,13 @@ public class UsuarioService {
         Usuario emailEncontrado = usuarioRepository.buscarPorEmail(email);
 
         if (emailEncontrado != null) {
-            throw new IllegalArgumentException("Este email já está cadastrado.");
+            throw new RecursoJaCadastradoException("Este email já está cadastrado.");
         }
 
         Usuario matriculaEncontrada = usuarioRepository.buscarPorMatricula(matricula);
 
         if (matriculaEncontrada != null) {
-            throw new IllegalArgumentException("Esta matrícula já está cadastrada.");
+            throw new RecursoJaCadastradoException("Esta matrícula já está cadastrada.");
         }
 
         Usuario usuario = new Usuario();

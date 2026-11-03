@@ -1,9 +1,14 @@
-
 package com.biblioteca.bookTrack.config;
 
+
+import java.net.URI;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -11,10 +16,31 @@ import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 @Configuration
 public class DynamoDbConfig {
 
+    @Value("${aws.dynamodb.endpoint}")
+    private String endpoint;
+
+    @Value("${aws.region}")
+    private String region;
+
+    @Value("${aws.accessKey}")
+    private String accessKey;
+
+    @Value("${aws.secretKey}")
+    private String secretKey;
+
     @Bean
     public DynamoDbClient dynamoDbClient() {
         return DynamoDbClient.builder()
-                .region(Region.US_EAST_1)
+                .endpointOverride(URI.create(endpoint))
+                .region(Region.of(region))
+                .credentialsProvider(
+                        StaticCredentialsProvider.create(
+                                AwsBasicCredentials.create(
+                                        accessKey,
+                                        secretKey
+                                )
+                        )
+                )
                 .build();
     }
 
